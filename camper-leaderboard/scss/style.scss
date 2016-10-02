@@ -1,0 +1,31 @@
+$color1 : #F1A9A0;
+$color2:  #913D88;
+$color3: #26A65B;
+$color4: #fff;
+
+.container {
+  background-color: $color4;
+  margin-top: 30px;
+  padding: 0px;
+}
+body {
+    background-color: $color1;
+    }
+
+.pic {
+  width: 50px;
+  border: 3px solid $color2;
+}
+.theader {
+  background-color: $color3;
+}
+.text-center {
+  text-align: center
+}
+.footer {
+  background-color: $color3;
+  height: 40px;
+  line-height: 40px;
+  color: $color1;
+  margin-top: 30px;
+}

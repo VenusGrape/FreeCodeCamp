@@ -1,0 +1,128 @@
+var Board = React.createClass({
+  getInitialState: function() {
+    return {
+      recent: [],
+      alltime: [],
+      display: 'recent'
+    }
+  },
+  
+  componentDidMount: function() {
+    $.get('https://fcctop100.herokuapp.com/api/fccusers/top/recent', function(data) {
+      this.setState({
+        recent: data
+      });
+    }.bind(this));
+    
+    $.get('https://fcctop100.herokuapp.com/api/fccusers/top/alltime', function(data) {
+      this.setState({
+        alltime: data
+      });
+    }.bind(this));
+  },
+  
+  showRecent: function() {
+    this.setState({
+      display: 'recent'
+    });
+  },
+  
+  showAllTime: function() {
+    this.setState({
+      display: 'alltime'
+    });
+  },
+  
+  render: function() {
+    return(
+      <table className="table table-striped table-bordered table-hover table-condensed">
+        <thead>
+          <tr>
+            <th colSpan="4" className="theader text-center"><h2>Leaderboard</h2></th>
+          </tr>
+          <tr>
+            <th><h4>#</h4></th>
+            <th><h4>Camper Name</h4></th>
+            <th className="text-center">
+              <a onClick={this.showRecent}>
+              <h4 >Points in Past 30 Days &nbsp;
+                <span
+                  className={
+                    this.state.display === 'recent' ? 'fa fa-dot-circle-o' : 'fa fa-circle-o'} />
+              </h4>
+            </a>
+          </th>
+          <th className="text-center">
+            <a onClick={this.showAllTime}>
+              <h4 >All Time Points &nbsp;
+                <span
+                  className={
+                    this.state.display === 'recent' ? 'fa fa-circle-o' : 'fa fa-dot-circle-o'} />
+              </h4>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        
+        <AllRows data={this.state[this.state.display]} />
+      </table>
+    )
+  }
+});
+
+var AllRows = React.createClass({
+  render: function() {
+    var rows = this.props.data.map(function (row, index) {
+       return <Row key={index} id={index + 1} data={row} />;
+    });
+    
+    return (
+      <tbody>
+        {rows}
+      </tbody>
+    );
+  }
+});
+
+var Row = React.createClass({
+  render: function(){
+    return (
+      <tr>
+        <td>{this.props.id}</td>  
+       <td>
+          <a target="_blank" href={"https://freecodecamp.com/" + this.props.data.username}>
+            <img className="pic" src={this.props.data.img} className="pic" />
+            &nbsp; {this.props.data.username}
+          </a>
+        </td>
+        <td className="text-center">{this.props.data.recent}</td>
+        <td className="text-center">{this.props.data.alltime}</td>
+      </tr>
+    );
+  }
+});
+
+var Footer = React.createClass({
+  render: function(){
+    return (
+      <div className="footer theader text-center row">
+        build by @venusgrape
+      </div>
+    );
+  }
+});
+
+var App = React.createClass({
+  render: function(){
+    return (
+      <div>
+        <Board />
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <App />,
+  document.getElementById("app")
+);
